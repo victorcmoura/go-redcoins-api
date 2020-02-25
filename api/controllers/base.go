@@ -10,7 +10,7 @@ import (
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
-	"github.com/victorsteven/fullstack/api/models"
+	"github.com/victorcmoura/go-redcoins-api/api/models"
 )
 
 type Server struct {
@@ -31,7 +31,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 		fmt.Printf("We are connected to the %s database", Dbdriver)
 	}
 
-	server.DB.Debug().AutoMigrate(&models.User{}, &models.Post{})
+	server.DB.Debug().AutoMigrate(&models.User{}, &models.Transaction{})
 
 	server.Router = mux.NewRouter()
 

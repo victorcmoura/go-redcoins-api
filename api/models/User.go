@@ -13,15 +13,15 @@ import(
 )
 
 type User struct {
-	ID uint32 'gorm:"primary_key;auto_increment" json:"id"'
-	Name string 'gorm:"size:255;not null;unique" json:"name"'
-	Email string 'gorm:"size:255;not null;unique" json:"email"'
-	BirthDate time.Time 'gorm:"default:CURRENT_TIMESTAMP" json:"birth_date"'
-	Password string 'gorm:"size:100;not null;" json:"password'
-	BCBalance uint64 'gorm:"default:0;not null" json:"bc_balance"'
-	USDBalance uint64 'gorm:"default:0;not null" json:"usd_balance"'
-	CreatedAt time.Time 'gorm:"default:CURRENT_TIMESTAMP" json:"created_at"'
-	UpdatedAt time.Time 'gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"'
+	ID uint32 `gorm:"primary_key;auto_increment" json:"id"`
+	Name string `gorm:"size:255;not null;unique" json:"name"`
+	Email string `gorm:"size:255;not null;unique" json:"email"`
+	BirthDate time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"birth_date"`
+	Password string `gorm:"size:100;not null;" json:"password`
+	BCBalance uint64 `gorm:"default:0;not null" json:"bc_balance"`
+	USDBalance uint64 `gorm:"default:0;not null" json:"usd_balance"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
 func Hash(password string) ([]byte, error) {
@@ -39,7 +39,7 @@ func (user *User) BeforeSave() error {
 		return err
 	}
 
-	user.password = string(hashedPassword)
+	user.Password = string(hashedPassword)
 	return nil
 }
 
@@ -108,16 +108,16 @@ func (user *User) SaveUser(db *gorm.DB) (*User, error) {
 func (user *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Find(&Users).Error
+	err = db.Debug().Model(&User{}).Find(&users).Error
 	if err != nil{
-		return &[]User, err
+		return &[]User{}, err
 	}
 	return &users, err
 }
 
 func (user *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 	var err error
-	err db.Debug().Model(&User{}).Where("id = ?", uid).Take(&user).Error
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&user).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -140,8 +140,8 @@ func (user *User) UpdateAUser (db *gorm.DB, uid uint32) (*User, error) {
 			"birth_date": user.BirthDate,
 			"bc_balance": user.BCBalance,
 			"usd_balance": user.USDBalance,
-			"updated_at": time.Now()
-		}
+			"updated_at": time.Now(),
+		},
 	)
 	if db.Error != nil {
 		return &User{}, db.Error

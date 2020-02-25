@@ -2,21 +2,19 @@ package models
 
 import (
 	"errors"
-	"html"
-	"strings"
 	"time"
 
 	"github.com/jinzhu/gorm"
 )
 
 type Transaction struct {
-	ID uint64 'gorm:"primary_key;auto_increment" json:"id"'
-	Type string 'gorm:"size:255;not null" json:"type"'
-	BCValue uint64 'gorm:"not null" json:"bc_value"'
-	USDValue uint64 'gorm:"not null" json:"usd_value"'
-	OwnerID uint32 'gorm:"nor null" json:"owner_id"'
-	CreatedAt time.Time 'gorm:"default:CURRENT_TIMESTAMP" json:"created_at"'
-	UpdatedAt time.Time 'gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"'
+	ID uint64 `gorm:"primary_key;auto_increment" json:"id"`
+	Type string `gorm:"size:255;not null" json:"type"`
+	BCValue uint64 `gorm:"not null" json:"bc_value"`
+	USDValue uint64 `gorm:"not null" json:"usd_value"`
+	OwnerID uint32 `gorm:"nor null" json:"owner_id"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
 func (transaction *Transaction) Prepare() {
@@ -42,7 +40,7 @@ func (transaction *Transaction) SaveTransaction(db *gorm.DB) (*Transaction, erro
 	var owner User
 
 	if transaction.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", transaction.OwnerID).Take(&user).Error
+		err = db.Debug().Model(&User{}).Where("id = ?", transaction.OwnerID).Take(&owner).Error
 		if err != nil {
 			return &Transaction{}, err
 		}
@@ -55,7 +53,7 @@ func (transaction *Transaction) FindAllTransactions(db *gorm.DB) (*[]Transaction
 	transactions := []Transaction{}
 	err = db.Debug().Model(&Transaction{}).Find(&transactions).Error
 	if err != nil {
-		return &[]Transaction, err
+		return &[]Transaction{}, err
 	}
 	return &transactions, nil
 }

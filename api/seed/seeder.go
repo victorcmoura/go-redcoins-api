@@ -13,26 +13,26 @@ var users = []models.User{
 		Name: "Victor Moura",
 		Email: "victor@email.com",
 		Password: "password",
-		BirthDate: time.Now().AddDate(-30, 0, 0)
+		BirthDate: time.Now().AddDate(-30, 0, 0),
 	},
 	models.User{
-		Nickname: "Moura Victor",
+		Name: "Moura Victor",
 		Email: "moura@email.com",
 		Password: "password",
-		BirthDate: time.Now().AddDate(-31, 0, 0)
+		BirthDate: time.Now().AddDate(-31, 0, 0),
 	},
 }
 
-var posts = []models.Transaction{
+var transactions = []models.Transaction{
 	models.Transaction{
 		Type: "buy",
 		BCValue: 1000000,
-		USDValue: 932932
+		USDValue: 932932,
 	},
 	models.Transaction{
 		Type: "buy",
 		BCValue: 1000000,
-		USDValue: 932932
+		USDValue: 932932,
 	},
 }
 
@@ -47,7 +47,7 @@ func Load(db *gorm.DB) {
 		log.Fatalf("cannot migrate table: %v", err)
 	}
 
-	err = db.Debug().Model(&models.Transaction{}).AddForeignKey("author_id", "users(id)", "cascade", "cascade").Error
+	err = db.Debug().Model(&models.Transaction{}).AddForeignKey("owner_id", "users(id)", "cascade", "cascade").Error
 	if err != nil {
 		log.Fatalf("attaching foreign key error: %v", err)
 	}
@@ -57,7 +57,7 @@ func Load(db *gorm.DB) {
 		if err != nil {
 			log.Fatalf("cannot seed users table: %v", err)
 		}
-		transactions[i].AuthorID = users[i].ID
+		transactions[i].OwnerID = users[i].ID
 
 		err = db.Debug().Model(&models.Transaction{}).Create(&transactions[i]).Error
 		if err != nil {
