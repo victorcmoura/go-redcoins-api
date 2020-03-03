@@ -49,7 +49,8 @@ func ExtractToken(r *http.Request) string {
 	if len(strings.Split(bearerToken, " ")) == 2 {
 		return strings.Split(bearerToken, " ")[1]
 	}
-	return ""
+
+	return bearerToken
 }
 
 func ExtractTokenID(r *http.Request) (uint32, error) {
