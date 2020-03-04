@@ -45,10 +45,8 @@ func (server *Server) CreateTransaction(w http.ResponseWriter, r *http.Request) 
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	if uid != transaction.OwnerID {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
-		return
-	}
+	transaction.OwnerID = uid
+	
 	transactionCreated, err := transaction.SaveTransaction(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
