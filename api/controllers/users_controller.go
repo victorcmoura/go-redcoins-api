@@ -84,7 +84,7 @@ func (server *Server) GetUserTransactions(w http.ResponseWriter, r *http.Request
 		return
 	}
 	transactions := []models.Transaction{}
-	err = server.DB.Find(&transactions, "owner_id = ?", uint32(uid)).Take(&transactions).Error
+	err = server.DB.Where("owner_id = ?", uint32(uid)).Find(&transactions).Error
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
