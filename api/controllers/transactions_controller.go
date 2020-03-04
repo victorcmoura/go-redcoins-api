@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/victorcmoura/go-redcoins-api/api/auth"
 	"github.com/victorcmoura/go-redcoins-api/api/models"
 	"github.com/victorcmoura/go-redcoins-api/api/responses"
 	"github.com/victorcmoura/go-redcoins-api/api/utils/formaterror"
+	"github.com/victorcmoura/go-redcoins-api/api/utils/timeutils"
 )
 
 func (server *Server) CreateTransaction(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +28,7 @@ func (server *Server) CreateTransaction(w http.ResponseWriter, r *http.Request) 
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	
+
 	err = transaction.Prepare(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -58,6 +60,11 @@ func (server *Server) CreateTransaction(w http.ResponseWriter, r *http.Request) 
 }
 
 func (server *Server) GetTransactions(w http.ResponseWriter, r *http.Request) {
+	_, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
 
 	transaction := models.Transaction{}
 
@@ -69,3 +76,24 @@ func (server *Server) GetTransactions(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, transactions)
 }
 
+func (server *Server) GetTransactionsByDay(w http.ResponseWriter, r *http.Request) {
+	_, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	var respMap map[string]string
+	json.NewDecoder(r.Body).Decode(&respMap)
+
+	layout := "2006-01-02"
+	date, err := time.Parse(layout, respMap["date"])
+
+	transactions := []models.Transaction{}
+	err = server.DB.Where("created_at BETWEEN ? AND ?", timeutils.BeginningOfTheDay(date), timeutils.EndOfTheDay(date)).Find(&transactions).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, transactions)
+}
