@@ -46,8 +46,8 @@ To buy or sell bitcoins, make a **POST** request to `/transactions` with the fol
 
 ```json
 {
-    "bc_value": 1, //bitcoin amount or -1
-    "usd_value": -1, //usd amount or -1
+    "bc_value": 1, // bitcoin amount or -1
+    "usd_value": -1, // usd amount or -1
     "type": "sell" // sell or buy
 }
 ```
@@ -57,8 +57,8 @@ To buy or sell bitcoins, make a **POST** request to `/transactions` with the fol
 - Buying 100USD in bitcoins:
 ```json
 {
-    "bc_value": -1, //bitcoin amount or -1
-    "usd_value": 100, //usd amount or -1
+    "bc_value": -1, // bitcoin amount or -1
+    "usd_value": 100, // usd amount or -1
     "type": "buy" // sell or buy
 }
 ```
@@ -66,8 +66,8 @@ To buy or sell bitcoins, make a **POST** request to `/transactions` with the fol
 - Buying 1 bitcoin:
 ```json
 {
-    "bc_value": 1, //bitcoin amount or -1
-    "usd_value": -1, //usd amount or -1
+    "bc_value": 1, // bitcoin amount or -1
+    "usd_value": -1, // usd amount or -1
     "type": "buy" // sell or buy
 }
 ```
@@ -75,8 +75,8 @@ To buy or sell bitcoins, make a **POST** request to `/transactions` with the fol
 - Selling 1 bitcoin:
 ```json
 {
-    "bc_value": 1, //bitcoin amount or -1
-    "usd_value": -1, //usd amount or -1
+    "bc_value": 1, // bitcoin amount or -1
+    "usd_value": -1, // usd amount or -1
     "type": "sell" // sell or buy
 }
 ```
@@ -84,8 +84,8 @@ To buy or sell bitcoins, make a **POST** request to `/transactions` with the fol
 - Selling 100USD in bitcoins:
 ```json
 {
-    "bc_value": -1, //bitcoin amount or -1
-    "usd_value": 100, //usd amount or -1
+    "bc_value": -1, // bitcoin amount or -1
+    "usd_value": 100, // usd amount or -1
     "type": "sell" // sell or buy
 }
 ```
