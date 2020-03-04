@@ -75,6 +75,23 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, userGotten)
 }
 
+func (server *Server) GetUserTransactions(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	uid, err := strconv.ParseUint(vars["id"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	transactions := []models.Transaction{}
+	err = server.DB.Where("owner_id = ?", uint32(uid)).Find(&transactions).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, transactions)
+}
+
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
