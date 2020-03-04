@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - etc/env/postgres.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    image: go-redcoins-api:latest
+    build:
+       context: .
+       dockerfile: ./Dockerfile
+    command: go run main.go
+    env_file:
+      - etc/env/api.env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
