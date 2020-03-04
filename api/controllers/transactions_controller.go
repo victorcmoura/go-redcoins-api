@@ -26,7 +26,13 @@ func (server *Server) CreateTransaction(w http.ResponseWriter, r *http.Request) 
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	transaction.Prepare()
+	
+	err = transaction.Prepare(server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
 	err = transaction.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -47,7 +53,7 @@ func (server *Server) CreateTransaction(w http.ResponseWriter, r *http.Request) 
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
-	w.Header().Set("Lacation", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, transactionCreated.ID))
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, transactionCreated.ID))
 	responses.JSON(w, http.StatusCreated, transactionCreated)
 }
 
