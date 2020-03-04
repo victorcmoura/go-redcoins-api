@@ -20,4 +20,5 @@ func (s *Server) initializeRoutes() {
 
 	s.Router.HandleFunc("/transactions", middlewares.SetMiddlewareJSON(s.CreateTransaction)).Methods("POST")
 	s.Router.HandleFunc("/transactions", middlewares.SetMiddlewareJSON(s.GetTransactions)).Methods("GET")
+	s.Router.HandleFunc("/transactions/by_day", middlewares.SetMiddlewareJSON(s.GetTransactionsByDay)).Methods("POST")
 }
