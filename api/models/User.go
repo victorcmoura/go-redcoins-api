@@ -18,8 +18,8 @@ type User struct {
 	Email string `gorm:"size:255;not null;unique" json:"email"`
 	BirthDate time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"birth_date"`
 	Password string `gorm:"size:100;not null;" json:"password`
-	BCBalance uint64 `gorm:"default:0;not null" json:"bc_balance"`
-	USDBalance uint64 `gorm:"default:0;not null" json:"usd_balance"`
+	BCBalance float64 `gorm:"default:0;not null" json:"bc_balance"`
+	USDBalance float64 `gorm:"default:0;not null" json:"usd_balance"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -49,8 +49,6 @@ func (user *User) Prepare() {
 	user.Email = html.EscapeString(strings.TrimSpace(user.Email))
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
-	user.BCBalance = 0
-	user.USDBalance = 0
 }
 
 func (user *User) Validate(action string) error {

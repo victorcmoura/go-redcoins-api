@@ -70,7 +70,18 @@ func (transaction *Transaction) SaveTransaction(db *gorm.DB) (*Transaction, erro
 		if err != nil {
 			return &Transaction{}, err
 		}
+
+		if transaction.Type == "buy" {
+			owner.BCBalance += transaction.BCValue
+			owner.USDBalance += transaction.USDValue
+		}else {
+			owner.BCBalance -= transaction.BCValue
+			owner.USDBalance -= transaction.USDValue
+		}
+	
+		db.Debug().Save(&owner)
 	}
+
 	return transaction, nil
 }
 

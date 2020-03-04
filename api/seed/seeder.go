@@ -26,13 +26,13 @@ var users = []models.User{
 var transactions = []models.Transaction{
 	models.Transaction{
 		Type: "buy",
-		BCValue: 1000000,
-		USDValue: 932932,
+		BCValue: 1,
+		USDValue: -1,
 	},
 	models.Transaction{
 		Type: "buy",
-		BCValue: 1000000,
-		USDValue: 932932,
+		BCValue: -1,
+		USDValue: 10000,
 	},
 }
 
@@ -52,6 +52,8 @@ func Load(db *gorm.DB) {
 		log.Fatalf("attaching foreign key error: %v", err)
 	}
 
+	models.UpdatePrice(db)
+
 	for i, _ := range users {
 		err = db.Debug().Model(&models.User{}).Create(&users[i]).Error
 		if err != nil {
@@ -59,11 +61,10 @@ func Load(db *gorm.DB) {
 		}
 		transactions[i].OwnerID = users[i].ID
 
-		err = db.Debug().Model(&models.Transaction{}).Create(&transactions[i]).Error
+		transactions[i].Prepare(db)
+		_, err = transactions[i].SaveTransaction(db)
 		if err != nil {
 			log.Fatalf("cannot seed transactions table: %v", err)
 		}
 	}
-
-	models.UpdatePrice(db)
 }
