@@ -97,8 +97,8 @@ func UpdatePrice(db *gorm.DB) {
 	usd_price := usd["price"].(float64)
 	
 	var price Price
-	price.USDToBC = usd_price
-	price.BCToUSD = 1.0/usd_price
+	price.BCToUSD = usd_price
+	price.USDToBC = 1.0/usd_price
 
 	err_db := db.Debug().Model(&Price{}).Create(&price).Error
 
