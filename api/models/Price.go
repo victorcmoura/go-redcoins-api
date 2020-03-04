@@ -55,7 +55,7 @@ func (price *Price) GetPrice(db *gorm.DB) (*Price, error) {
 
 	last_update := price.CreatedAt
 
-	if gorm.IsRecordNotFoundError(err) || (err == nil && last_update.Add(time.Minute * 30).After(time.Now())){
+	if gorm.IsRecordNotFoundError(err) || (err == nil && last_update.Add(time.Minute * 60).After(time.Now())){
 		return &Price{}, errors.New("No valid price was found")
 	}
 
