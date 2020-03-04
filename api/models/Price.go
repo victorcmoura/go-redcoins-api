@@ -75,7 +75,7 @@ func UpdatePrice(db *gorm.DB) {
 	q.Add("id", "1")
 
 	req.Header.Set("Accepts", "application/json")
-	req.Header.Add("X-CMC_PRO_API_KEY", os.Getenv("EXTERNAL_API_TOKEN"))
+	req.Header.Add("X-CMC_PRO_API_KEY", os.Getenv("COIN_MARKET_CAP_API_TOKEN"))
 	req.URL.RawQuery = q.Encode()
 
 
