@@ -90,6 +90,10 @@ func UpdatePrice(db *gorm.DB) {
 
 	json.NewDecoder(resp.Body).Decode(&respMap)
 
+	if respMap["data"] == nil {
+		fmt.Println("Coin Marked API response came empty, check access token");
+	}
+
 	data := respMap["data"].(map[string]interface{})
 	bitcoin := data["1"].(map[string]interface{})
 	quote := bitcoin["quote"].(map[string]interface{})
