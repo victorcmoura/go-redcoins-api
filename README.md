@@ -162,7 +162,19 @@ This application was built to work within a Docker environment. To execute the w
 sudo docker-compose up
 ```
 
+The application will run, by default, on `http://localhost:8080`
+
 Keep in mind that there are some environment variables, as `COIN_MARKET_CAP_API_TOKEN`, that must be defined in `etc/env/api.env`, located in the root of this project.
 
 ## Bitcoin Price Update Policy
 This application is configured to fetch the latest Bitcoin value from [Coin Market Cap](https://coinmarketcap.com/) every 10 minutes through a cronjob (And on application startup). If, due to multiple failures, the latest price is outdated by more than 60 minutes, no transactions will be created until a more updated price is fetched.
+
+## Available Endpoints
+
+- **GET** `/` - Home
+- **POST** `/login` - Login
+- **GET, POST** `/users` - Create and list users
+- **GET, PUT, DELETE** `/users/{user_id}` - Get single user, update a single user or delete a single user
+- **GET** `/users/{user_id}/transactions` - Get transactions from a single user
+- **GET, POST** `/transactions` - Create and list transactions
+- **POST** `/transactions/by_day` - Get transactions made in a given day
