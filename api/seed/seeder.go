@@ -64,4 +64,6 @@ func Load(db *gorm.DB) {
 			log.Fatalf("cannot seed transactions table: %v", err)
 		}
 	}
+
+	models.UpdatePrice(db)
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"github.com/jasonlvhit/gocron"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
@@ -31,7 +32,10 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 		fmt.Printf("We are connected to the %s database", Dbdriver)
 	}
 
-	server.DB.Debug().AutoMigrate(&models.User{}, &models.Transaction{})
+	server.DB.Debug().AutoMigrate(&models.User{}, &models.Transaction{}, &models.Price{})
+
+	gocron.Every(10).Minutes().Do(func() { models.UpdatePrice(server.DB) })
+	gocron.Start()
 
 	server.Router = mux.NewRouter()
 
